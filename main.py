@@ -90,25 +90,20 @@ def onClose():
     serialData.close()
     print("off")
 
-
+    
 def control(current, bar, t1, t2, bar_control):
     if current >= t1:
-        if current <= t2:
-            if bar <= bar_control:
+        if bar <= bar_control:
+            if current < t2:
                 serSend(1)
             else:
                 serSend(0)
         else:
             serSend(0)
     else:
-        serSend(0)
-# def openRead():
-#     rx = serialData.readLine()
-#     rxs = str(rx, 'utf-8').strip()
-#     data = rxs.split(',')
-#     print(data)
+        serSend(0)       
 
-
+        
 def onRead():
     if not serialData.canReadLine(): return
     rx = serialData.readLine()
@@ -122,10 +117,10 @@ def onRead():
         ui.parN.display(float(data[2]))
         ui.prbar.setValue(int(float(data[2])))
         print(float(data[2]))
-
+#circal the control must be from 0 to lenDat-1 
         dat, lenDat = openFile()
         i = -1
-        while i < lenDat:
+        while i < lenDat-1:
             control(float(data[1]), float(data[2]), dat[i][0], dat[lenDat-1][0], dat[i][1])
             i += 1
 
